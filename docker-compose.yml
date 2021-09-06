@@ -1,0 +1,14 @@
+version: '1'
+services:
+  goat:
+    build: .
+    restart: always
+    container_name: goat-tool
+    volumes:
+      - /opt/data/goat:/app/destinations        
+    ports:
+      - 4008:4000
+
+volumes:
+  goat-destinations:
+

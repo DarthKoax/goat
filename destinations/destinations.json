@@ -1,0 +1,18 @@
+[
+    {
+        "key": "google",
+        "route": "https://google.com"
+    },
+    {
+        "key": "kyle",
+        "route": "https://github.com/DarthKoax"
+    },
+    {
+        "key": "twitter",
+        "route": "https://twitter.com"
+    },
+    {
+        "key": "meme",
+        "route": "https://meme.curgenven.xyz"
+    }
+]
