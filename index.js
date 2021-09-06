@@ -9,6 +9,7 @@ const fs = require('fs');
 
 const DESTINATIONS = "./destinations/destinations.json"
 
+
 app.use((req, res, next) => {
   res.append('Access-Control-Allow-Origin', '[*]');
   res.append('Access-Control-Allow-Methods', 'GET,POST');
@@ -24,12 +25,11 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', async function (req, res) {
   // console.log(`Route reached: /api/img/${atob(req.params.img)}`)
   // console.log(req.query);
+  let rawdata = fs.readFileSync(DESTINATIONS)
+  let result = JSON.parse(rawdata);
 
   if (req.query.go) {
     // let result;
-    let rawdata = fs.readFileSync(DESTINATIONS)
-    let result = JSON.parse(rawdata);
-
     result.forEach(element => {
       console.log(element.key)
       if (element.key === req.query.go) {
@@ -39,15 +39,25 @@ app.get('/', async function (req, res) {
       }
     });
   } else {
+    let string = "<div>";
     
+    // let doc = 
+    result.forEach(element => {
+      console.log(element.key)
+      string += "<p>" + escape(element.key) + " | " + escape(element.route) +"</p>";
+      
+    })
+
+    string += '</div>';
+
     res.status(200);
-    res.send("<div<p>Usage, </p> <p>'GO' = ?go=%s </p><p> 'ADD' = /add?key=%s&route=%s</p></div>")
+    res.send(`<div<p>Usage, </p> <p>'GO' = https://URL?go=%s </p><p> 'ADD' = https://URL/add?key=%s&route=%s</p></div>${string}`)
   }
 });
 
 // /add?key=%s&route=%s
 app.get('/add', async function (req, res) {
-  
+
   if (req.query.key && req.query.route) {
 
     let rawdata = fs.readFileSync(DESTINATIONS)
@@ -57,14 +67,14 @@ app.get('/add', async function (req, res) {
       "key": req.query.key,
       "route": req.query.route
     }
-    
+
     console.log(result)
-    
+
     result.push(inData);
-    
+
     result = JSON.stringify(result);
     // let result;
-    fs.writeFileSync(DESTINATIONS,result)
+    fs.writeFileSync(DESTINATIONS, result)
     res.status(200);
     res.send("new route added");
   }
